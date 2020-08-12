@@ -42,7 +42,7 @@ func (m *Module) Init(b *bear.Bear) {
 		}
 	}
 
-	b.AddHandler(onMessageCreate(b.Log, m))
+	b.AddHandler(onDirectMessageCreate(b.Log, m))
 }
 
 func (*Module) Close(*bear.Bear) {

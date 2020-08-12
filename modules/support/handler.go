@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func onMessageCreate(log *logrus.Logger, m *Module) func(*discordgo.Session, *discordgo.MessageCreate) {
+func onDirectMessageCreate(log *logrus.Logger, m *Module) func(*discordgo.Session, *discordgo.MessageCreate) {
 	return func(session *discordgo.Session, messageCreate *discordgo.MessageCreate) {
 		if messageCreate.Author.ID == session.State.User.ID {
 			return
@@ -42,5 +42,28 @@ func onMessageCreate(log *logrus.Logger, m *Module) func(*discordgo.Session, *di
 		ctx.ChannelID = m.SupportChannelID
 
 		_, _ = ctx.SendMessage(bear.InfoColor, fmt.Sprintf("Support Message [%s]", entry.ID), "<@%s> %s", entry.SenderID, entry.MessageContent)
+
+		for _, attachment := range messageCreate.Attachments {
+			_, _ = session.ChannelMessageSendEmbed(m.SupportChannelID, &discordgo.MessageEmbed{
+				URL:         "",
+				Type:        "image",
+				Title:       "",
+				Description: "",
+				Timestamp:   "",
+				Color:       0,
+				Footer:      nil,
+				Image: &discordgo.MessageEmbedImage{
+					URL:      attachment.URL,
+					ProxyURL: attachment.ProxyURL,
+					Width:    attachment.Width,
+					Height:   attachment.Height,
+				},
+				Thumbnail: nil,
+				Video:     nil,
+				Provider:  nil,
+				Author:    nil,
+				Fields:    nil,
+			})
+		}
 	}
 }
