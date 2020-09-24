@@ -11,5 +11,6 @@
     "debug": true,
     "file": ""
   },
-  "support_channel_id": "674363948346376215"
+  "support_channel_id": "674363948346376215",
+  "db": "support.db"
 }

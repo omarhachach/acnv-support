@@ -8,4 +8,5 @@ import (
 type Config struct {
 	*bear.Config
 	SupportChannelID string `json:"support_channel_id"`
+	DB               string `json:"db"`
 }

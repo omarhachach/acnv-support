@@ -8,6 +8,8 @@ import (
 	"syscall"
 
 	"github.com/omarhachach/bear"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 
 	"omarh.net/acnv-support/modules/support"
 )
@@ -26,8 +28,14 @@ func main() {
 		panic("error reading config: " + err.Error())
 	}
 
-	b := bear.New(config.Config).RegisterModules(&support.Module{
+	db, err := gorm.Open(sqlite.Open(config.DB), &gorm.Config{})
+	if err != nil {
+		panic("error opening db: " + err.Error())
+	}
+
+	b := bear.New(config.Config).RegisterModules(&support.Ticket{
 		SupportChannelID: config.SupportChannelID,
+		DB:               db,
 	}).Start()
 
 	c := make(chan os.Signal, 1)
