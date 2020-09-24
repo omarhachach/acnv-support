@@ -1,49 +1,58 @@
 package support
 
 import (
-	"errors"
-	"io/ioutil"
-	"os"
 	"sync"
 
 	"github.com/omarhachach/bear"
+	"gorm.io/gorm"
+
+	"omarh.net/acnv-support/modules/support/model"
 )
 
-type Module struct {
+// Ticket is the module for handling support tickets.
+type Ticket struct {
 	SupportChannelID string
+	DB               *gorm.DB
 	sync.Mutex
 }
 
-func (m *Module) GetName() string {
-	return "Support"
+// GetName will return the name of the module for use in the help module.
+func (*Ticket) GetName() string {
+	return "Tickets"
 }
 
-func (m *Module) GetDesc() string {
+// GetDesc will return the description of the module.
+func (*Ticket) GetDesc() string {
 	return "This allows users to send support tickets to the staff team."
 }
 
-func (m *Module) GetCommands() []bear.Command {
+// GetCommands will return the commands associated with this module.
+func (t *Ticket) GetCommands() []bear.Command {
 	return []bear.Command{
-		&ReplyCommand{Module: m},
+		&ReplyCommand{Module: t},
+		&CloseCommand{Module: t},
 	}
 }
 
-func (m *Module) GetVersion() string {
-	return "1.0.0"
+// GetVersion will return the version of the module.
+func (*Ticket) GetVersion() string {
+	return "1.1.0"
 }
 
-func (m *Module) Init(b *bear.Bear) {
-	_, err := os.Open("support-file.json")
-	if errors.Is(err, os.ErrNotExist) {
-		err := ioutil.WriteFile("support-file.json", []byte("{}"), 0755)
-		if err != nil {
-			b.Log.WithError(err).Fatal("Error starting module, failed while create file support-file.json")
-			return
-		}
+// Init will initialize the module.
+func (t *Ticket) Init(b *bear.Bear) {
+	err := t.DB.AutoMigrate(
+		&model.Ticket{},
+	)
+	if err != nil {
+		b.Log.WithError(err).Fatal("Error migrating database.")
+
+		return
 	}
 
-	b.AddHandler(onDirectMessageCreate(b.Log, m))
+	b.AddHandler(OnDirectMessageCreate(b.Log, t))
 }
 
-func (*Module) Close(*bear.Bear) {
+// Close handles the closing of the module.
+func (*Ticket) Close(*bear.Bear) {
 }
