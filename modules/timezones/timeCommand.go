@@ -61,7 +61,7 @@ func (t *TimeCommand) GetHandler() func(*bear.Context) {
 			ctx.SendSuccessMessage("%s in %s is %s in %s", localTime, cmdSplit[2], parsedTime.In(loc2).Format("03PM"), cmdSplit[3])
 		}
 
-		ctx.SendErrorMessage()
+		ctx.SendErrorMessage("Invalid usage: -time <timezone> or -time <1am> <timezone> <timezone>")
 	}
 }
 
