@@ -12,7 +12,7 @@ type Model struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
-	ID        string           `gorm:"primaryKey"`
+	ID        string         `gorm:"primaryKey"`
 }
 
 // Ticket is the model for a ticket.

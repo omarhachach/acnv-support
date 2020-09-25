@@ -12,6 +12,7 @@ import (
 	"gorm.io/gorm"
 
 	"omarh.net/acnv-support/modules/support"
+	"omarh.net/acnv-support/modules/timezones"
 )
 
 func main() {
@@ -33,10 +34,13 @@ func main() {
 		panic("error opening db: " + err.Error())
 	}
 
-	b := bear.New(config.Config).RegisterModules(&support.Ticket{
-		SupportChannelID: config.SupportChannelID,
-		DB:               db,
-	}).Start()
+	b := bear.New(config.Config).RegisterModules(
+		&support.Ticket{
+			SupportChannelID: config.SupportChannelID,
+			DB:               db,
+		},
+		&timezones.TimeZone{DB: db},
+	).Start()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
