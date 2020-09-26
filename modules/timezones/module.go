@@ -22,6 +22,8 @@ func (t *TimeZone) GetDesc() string {
 
 func (t *TimeZone) GetCommands() []bear.Command {
 	return []bear.Command{
+		&TimezoneCommand{},
+		&SetTimeCommand{DB: t.DB},
 		&TimeCommand{DB: t.DB},
 	}
 }
@@ -43,4 +45,3 @@ func (t *TimeZone) Init(b *bear.Bear) {
 
 func (t *TimeZone) Close(*bear.Bear) {
 }
-
