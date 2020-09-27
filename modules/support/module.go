@@ -6,7 +6,7 @@ import (
 	"github.com/omarhachach/bear"
 	"gorm.io/gorm"
 
-	"omarh.net/acnv-support/modules/support/model"
+	"github.com/omarhachach/acnv-support/modules/support/model"
 )
 
 // Ticket is the module for handling support tickets.

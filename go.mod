@@ -1,4 +1,4 @@
-module omarh.net/acnv-support
+module github.com/omarhachach/acnv-support
 
 go 1.14
 

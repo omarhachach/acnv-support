@@ -10,9 +10,9 @@ import (
 	"github.com/omarhachach/bear"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 
-	"omarh.net/acnv-support/modules/support"
-	"omarh.net/acnv-support/modules/timezones"
+	"github.com/omarhachach/acnv-support/modules/support"
 )
 
 func main() {
@@ -29,7 +29,13 @@ func main() {
 		panic("error reading config: " + err.Error())
 	}
 
-	db, err := gorm.Open(sqlite.Open(config.DB), &gorm.Config{})
+	dbConfig := &gorm.Config{}
+
+	if !config.Log.Debug {
+		dbConfig.Logger = logger.Default.LogMode(logger.Error)
+	}
+
+	db, err := gorm.Open(sqlite.Open(config.DB), dbConfig)
 	if err != nil {
 		panic("error opening db: " + err.Error())
 	}
@@ -39,7 +45,6 @@ func main() {
 			SupportChannelID: config.SupportChannelID,
 			DB:               db,
 		},
-		&timezones.TimeZone{DB: db},
 	).Start()
 
 	c := make(chan os.Signal, 1)

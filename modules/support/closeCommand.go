@@ -7,7 +7,7 @@ import (
 	"github.com/omarhachach/bear"
 	"gorm.io/gorm"
 
-	"omarh.net/acnv-support/modules/support/model"
+	"github.com/omarhachach/acnv-support/modules/support/model"
 )
 
 // CloseCommand will close a support ticket.
@@ -34,7 +34,7 @@ func (r *CloseCommand) GetHandler() func(*bear.Context) {
 		caseId := cmdSplit[1]
 
 		ticket := &model.Ticket{
-			Model: model.Model{ ID: caseId },
+			Model: model.Model{ID: caseId},
 		}
 
 		err := r.Module.DB.Delete(&ticket).Error
@@ -45,5 +45,9 @@ func (r *CloseCommand) GetHandler() func(*bear.Context) {
 		}
 
 		ctx.SendSuccessMessage("Successfully closed Case %s.", caseId)
+
+		ctx.ChannelID = ticket.ChannelID
+
+		ctx.SendInfoMessage("Your support ticket has been resolved.")
 	}
 }

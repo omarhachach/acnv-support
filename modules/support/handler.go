@@ -9,7 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 
-	"omarh.net/acnv-support/modules/support/model"
+	"github.com/omarhachach/acnv-support/modules/support/model"
 )
 
 // OnDirectMessageCreate is an event handler for *discordgo.MessageCreate but will check whether it is a direct message.
@@ -68,7 +68,7 @@ func handleSupportMessage(log *logrus.Logger, session *discordgo.Session, m *dis
 
 	for _, attachment := range m.Attachments {
 		_, _ = session.ChannelMessageSendEmbed(module.SupportChannelID, &discordgo.MessageEmbed{
-			Type: "image",
+			Type:  "image",
 			Title: fmt.Sprintf("Support Message [%s]", ticket.ID),
 			Image: &discordgo.MessageEmbedImage{
 				URL:      attachment.URL,
